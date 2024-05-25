@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esiti</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-info">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+            Gestione universitaria > </a>
+        <a href="{{ url_for('student.studentPage') }}" class="navbar-brand">Profilo studente ></a>
+        <a href="#" class="navbar-brand">Bacheca esiti</a>
+        <a class="navbar-brand ml-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('student.appelliDisponibili') }}">Prenota Appello</a>
+          <a href="{{ url_for('student.prenotazioni') }}">Prenotazioni</a>
+          <a href="{{ url_for('student.pianoDiStudi') }}">Piano di studi</a>
+          <a href="{{ url_for('student.esiti') }}">Bacheca Esiti</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btn-info" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 mb-2 m-5  containergrigio">
+    <div class="container p-3">
+
+    <h2>Bacheca esiti</h2>
+    <hr>
+
+    <table class="table">
+        <thead class="thead bg-info">
+            <tr>
+                <th scope="col">Esame</th>
+                <th scope="col">Voto</th>
+                <th scope="col">Lode</th>
+                <th scope="col">Formalizza</th>
+                <th scope="col">Rifiuta</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for esame in esami %}
+                <tr>
+                    <td>{{ esame.name }}</td>
+                    <td>
+                    {% if esame.getVoto(student.matricola) == None %}
+                        Non Presente
+                    {% elif esame.getVoto(student.matricola) < 18 %}
+                        IDONEO
+                    {% elif esame.getVoto(student.matricola) > 30 %}
+                        30
+                    {% else %}
+                        {{ esame.getVoto(student.matricola) }}
+                    {% endif %}
+                    </td>
+                    <td>
+                            {{ esame.getLode(student.matricola) }}
+                    </td>
+                    <td>
+                            <a href="{{url_for('student.formalizza', codEsame = esame.cod)}}">
+                                <button type="submit" class="btn btn-danger">Formalizza</button>
+                            </a>
+                    </td>
+                    <td>
+                        <a href="{{url_for('student.rifiuta', codEsame = esame.cod)}}">
+                            <button type="submit" class="btn btn-danger">Rifiuta</button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-Vkoo8x4CGsF3pHJ2+1iRBCEs5Z2AKxyAuvSL9syFiL4U6pV0H+CBKd5im5MlVbB" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyUma1i2D02M7j9i/JXQn5CkMc5NKeZ6I" crossorigin="anonymous"></script>
+</body>
+</html>

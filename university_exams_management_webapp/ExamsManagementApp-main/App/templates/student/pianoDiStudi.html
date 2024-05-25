@@ -1,0 +1,90 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+    <title>Esami dello studente</title>
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-info">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+            Gestione universitaria > </a>
+        <a href="{{ url_for('student.studentPage') }}" class="navbar-brand">Profilo studente ></a>
+        <a href="#" class="navbar-brand">Piano di studio</a>
+        <a class="navbar-brand ml-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('student.appelliDisponibili') }}">Prenota Appello</a>
+          <a href="{{ url_for('student.prenotazioni') }}">Prenotazioni</a>
+          <a href="{{ url_for('student.pianoDiStudi') }}">Piano di studi</a>
+          <a href="{{ url_for('student.esiti') }}">Bacheca Esiti</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btn-info" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 mb-2 m-5  containergrigio">
+    <div class="container p-3">
+
+    <h2>Piano di studio</h2>
+    <hr>
+        <table class="table">
+            <thead class="bg-info">
+                <tr>
+                    <th scope="col">Corso</th>
+                    <th scope="col">Voto</th>
+                    <th scope="col">Lode</th>
+                    <th scope="col">CFU</th>
+                    <th scope="col">Anno</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for esame in studente.esami %}
+                    <tr>
+                        <td>{{ esame.name }}</td>
+                        <td>
+                            {% if esame.getVotoFormalizzato(studente.matricola) == None %}
+                            Non ancora sostenuto
+                            {% elif esame.getVotoFormalizzato(studente.matricola) == 0 %}
+                            IDONEO
+                            {% elif esame.getVotoFormalizzato(studente.matricola) > 30 %}
+                                    30
+                            {% else %}
+                                {{ esame.getVotoFormalizzato(studente.matricola) }}
+                            {% endif %}
+                        </td>
+                        <td> {{esame.getLode(studente.matricola) }}</td>
+                        <td>{{ esame.cfu }}</td>
+                        <td>{{ esame.anno }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea Esame</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-dark px-3">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+        Gestione universitaria > </a>
+        <a href="{{ url_for('admin.adminPage') }}" class="navbar-brand">Profilo Admin ></a>
+        <a href="#" class="navbar-brand">Creazione Esami</a>
+        <a class="navbar-brand ml-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('admin.creaStudente') }}"> Crea Studenti</a>
+          <a href="{{ url_for('admin.creaDocente') }}">Crea Docenti</a>
+          <a href="{{ url_for('admin.creaEsame') }}">Crea Esami</a>
+          <a href="{{ url_for('admin.visualizzaStudenti') }}">Visualizza Studenti</a>
+          <a href="{{ url_for('admin.visualizzaDocenti') }}">Visualizza Docenti</a>
+          <a href="{{ url_for('admin.visualizzaEsami') }}">Visualizza Esami</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btnmenu" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 mb-2 m-5  containergrigio  d-flex justify-content-center align-items-center">
+        <div class="container p-3">
+
+    <h2>Crea Esame</h2>
+    <hr>
+    <form method="POST" action="{{ url_for('admin.inserisciEsame') }}">
+        <label for="name">Nome:</label>
+        <input type="text" id="name" name="name" class="form-control" required>
+
+        <label for="cod">Codice:</label>
+        <input type="text" id="cod" name="cod" class="form-control" required>
+
+        <label for="cfu">CFU:</label>
+        <input type="number" id="cfu" name="cfu" class="form-control" required max="60">
+
+        <label for="anno">Anno:</label>
+        <input type="number" id="anno" name="anno" class="form-control" min="1" max="3" required>
+
+        <div class="form-group">
+                <label for="docente_cod">Docenti:</label>
+                <select class="docente_cod" id="docente_cod" name="docente_cod" required>
+                    {% for docente in docenti %}
+                        <option value="{{ docente.cod }}">{{ docente.name ~ ' ' ~  docente.surname }}</option>
+                    {% endfor %}
+                </select>
+        </div>
+
+        <br>
+        <button type="submit" class="btn btn-danger">Crea</button>
+    </form>
+
+    </div>
+    </div>
+</body>
+</html>

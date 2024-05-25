@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elenco Studenti Appello</title>
+    <!-- Link agli stili Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-info">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+            Gestione universitaria > </a>
+        <a href="{{ url_for('teacher.teacherPage') }}" class="navbar-brand">Profilo Insegnante ></a>
+        <a href="{{ url_for('teacher.visualizzaAppelli') }}" class="navbar-brand">Gestione appelli ></a>
+        <a href="#" class="navbar-brand">Studenti iscritti</a>
+        <a class="navbar-brand ml-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('teacher.visualizzaCorsi') }}">Visualizza Corsi</a>
+          <a href="{{ url_for('teacher.visualizzaAppelli') }}">Visualizza Appelli</a>
+          <a href="{{ url_for('teacher.visualizzaProveGestite') }}">Visualizza Prove Gestite</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btn-info" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 mb-2 m-5 containergrigio">
+    <div class="container p-3">
+    <h2>Elenco Studenti Iscritti all'Appello relativo alla prova : </h2>
+    <hr>
+
+    <table class="table mt-4">
+        <thead class="bg-info">
+            <tr>
+                <th>Nome Studente</th>
+                <th>Cognome Studente</th>
+                <th>Voto</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for studente in studenti %}
+                <tr>
+                    <td>{{ studente.name }}</td>
+                    <td>{{ studente.surname }}</td>
+                    <td>{{ studente.getVotoProva( codAppello ) }}</td>
+                    <td>
+                    {% if is_appello_nel_passato %}
+                        <form method="post" action="{{ url_for('teacher.setVoto') }}" onsubmit="return validateForm()">
+                            <input type="hidden" name="studente_id" value="{{ studente.matricola }}">
+                            <input type="hidden" name="codAppello" value="{{ codAppello }}">
+                            <div class="form-group">
+                                <input type="number" name="voto" id="voto" class="form-control" placeholder="Inserisci il voto" required min="0" max="31">
+                            </div>
+                            <button type="submit" class="btn btn-danger">Imposta Voto</button>
+                        </form>
+                    {% else %}
+                        <button type="button" class="btn btnteall" disabled>Operazioni Non Consentite</button>
+                    {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+
+<!-- Script di Bootstrap (jQuery e Popper.js sono richiesti per alcune funzionalità) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+function validateForm() {
+    var voto = document.getElementById("voto").value;
+    if (voto < 0 || voto > 31) {
+        alert("Il voto deve essere compreso tra 0 e 31.");
+        return false;
+    }
+    return true;
+}
+</script>
+
+</body>
+</html>

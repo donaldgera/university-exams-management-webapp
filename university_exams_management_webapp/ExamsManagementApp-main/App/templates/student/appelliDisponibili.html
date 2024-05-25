@@ -1,0 +1,105 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <title>Prenotazioni disponibili per lo studente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+
+
+    <nav class="navbar navbar-dark bg-info">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+            Gestione universitaria > </a>
+        <a href="{{ url_for('student.studentPage') }}" class="navbar-brand">Profilo studente ></a>
+        <a href="#" class="navbar-brand">Prenotazioni Appelli</a>
+        <a class="navbar-brand ml-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('student.appelliDisponibili') }}">Prenota Appello</a>
+          <a href="{{ url_for('student.prenotazioni') }}">Prenotazioni</a>
+          <a href="{{ url_for('student.pianoDiStudi') }}">Piano di studi</a>
+          <a href="{{ url_for('student.esiti') }}">Bacheca Esiti</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btn-info" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 mb-2 m-5  containergrigio">
+    <div class="container p-3">
+
+    <h2>Prenotazioni disponibili per lo studente</h2>
+    <hr>
+       {% if messaggi %}
+    <!-- Mostra un alert -->
+    <script>
+        alert("{{ messaggi[0] }}");
+    </script>
+        {% endif %}
+        <table class="table">
+            <thead class="thead bg-info">
+                <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Luogo</th>
+                    <th scope="col">Prova</th>
+                    <th scope="col">Corso Relativo</th>
+                    <th scope="col">Prenota</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appello in studente.getAppelliDisponibiliPossibili() %}
+                    <tr>
+                        <td>{{ appello.data.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ appello.luogo }}</td>
+                        <td>{{ appello.prove }}</td>
+                        <td>{{ appello.prove.esami }}</td>
+                        <td>
+                                {% if appello.prove in prove_a_cui_sono_iscritto %}
+                                    <a href="{{ url_for('student.prenotaAppello', codAppello=appello.codAppello) }}"
+                                       onclick="return confirm('Stai andando ad eliminare un appello che hai già effettuato,' +
+                                        ' procedendo con la prenotazione andrai ad invalidare l appello che hai selezionato' +
+                                         ' e anche gli eventuali appelli relativi a prove che richiedevano il superamento di una prova' +
+                                          ' relativa all appelllo selezionato.' +
+                                           ' Sei sicuro di voler effettuare la prenotazione?');">
+                                        <button type="submit" class="btn btn-danger">Prenota</button>
+                                    </a>
+                                {% else %}
+                                    <a href="{{ url_for('student.prenotaAppello', codAppello=appello.codAppello) }}">
+                                        <button type="submit" class="btn btnteall">Prenota</button>
+                                    </a>
+                                {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        <!--<a href="{{ url_for('student.studentPage') }}" class="btn btn-info">
+        <i class="fas fa-arrow-left"></i> Torna Indietro
+        </a>-->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

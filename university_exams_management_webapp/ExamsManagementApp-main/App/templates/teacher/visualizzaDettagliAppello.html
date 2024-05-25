@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettagli Appello</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .navbar{
+            background-color: #17a2b8;
+        }
+        /*da usare nelle pagine che usano bootsrap 5!*/
+        .btnmenu{
+            background-color: #17a2b8;
+            color: white;
+        }
+        .btnmenu:hover{
+            background-color: #17a2b8;
+            color: white;
+        }
+        .containergrigio {
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 50px;
+            /*width: 75%;*/
+        }
+    </style>
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark px-3">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+            Gestione universitaria > </a>
+        <a href="{{ url_for('teacher.teacherPage') }}" class="navbar-brand">Profilo Insegnante ></a>
+        <a href="{{ url_for('teacher.visualizzaAppelli') }}" class="navbar-brand">Gestione appelli ></a>
+        <a href="#" class="navbar-brand">Dettagli appello</a>
+        <a class="navbar-brand ms-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('teacher.visualizzaCorsi') }}">Visualizza Corsi</a>
+          <a href="{{ url_for('teacher.visualizzaAppelli') }}">Visualizza Appelli</a>
+          <a href="{{ url_for('teacher.visualizzaProveGestite') }}">Visualizza Prove Gestite</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btnmenu" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 mb-2 mx-5  containergrigio  d-flex justify-content-center align-items-center">
+    <div class="container p-3" style="width: 75%;">
+
+        <h2>Dettagli Appello</h2>
+        <hr>
+
+        <div class="card">
+            <div class="card-body p-3">
+                <h5 class="card-title">Codice Appello: {{ appello.codAppello }}</h5>
+                <p class="card-text">Data Appello: {{ appello.data.strftime('%Y-%m-%d') }}</p>
+                <p class="card-text">Ora Appello: {{ appello.data.strftime('%H:%M') }}</p>
+                <p class="card-text">Esame: {{ appello.prove.esami.name }}</p>
+                <p class="card-text">Prova: {{ appello.prove.cod }}</p>
+                <p class="card-text">Docente: {{ appello.prove.docenti }}</p>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

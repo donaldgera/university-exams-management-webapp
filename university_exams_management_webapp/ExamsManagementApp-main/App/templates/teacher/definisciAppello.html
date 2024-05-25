@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea Appello</title>
+    <!-- Collegamento con Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-info">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+            Gestione universitaria > </a>
+        <a href="{{ url_for('teacher.teacherPage') }}" class="navbar-brand">Profilo Insegnante ></a>
+        <a href="{{ url_for('teacher.visualizzaProveGestite') }}" class="navbar-brand">Prove ></a>
+        <a href="#" class="navbar-brand">Creazione appello</a>
+        <a class="navbar-brand ml-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('teacher.visualizzaCorsi') }}">Visualizza Corsi</a>
+          <a href="{{ url_for('teacher.visualizzaAppelli') }}">Visualizza Appelli</a>
+          <a href="{{ url_for('teacher.visualizzaProveGestite') }}">Visualizza Prove Gestite</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btn-info" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 mb-2 m-5  containergrigio  d-flex justify-content-center align-items-center">
+        <div class="container p-3" style="width: 75%;">
+
+        <h2>Crea Appello</h2>
+        <hr>
+
+        <form id="appelloForm" method="POST" action="{{ url_for('teacher.creaAppello', codProva=codProva) }}">
+            <div class="form-group">
+                <label for="data">Data:</label>
+                <input type="datetime-local" class="form-control" id="data" name="data" required>
+            </div>
+
+            <div class="form-group">
+                <label for="luogo">Luogo:</label>
+                <input type="text" class="form-control" id="luogo" name="luogo" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="prova">Prova Relativa:</label>
+                <select class="form-control" id="prova" name="prova" required>
+                    {% for prova in prove %}
+                        <option value="{{ prova.cod }}">{{ prova.cod }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-danger" onclick="creaAppello()">Crea Appello</button>
+        </form>
+    </div>
+    </div>
+
+    <!-- Collegamento con Bootstrap JS e Popper.js (richiesti per alcune funzionalità di Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+    // Funzione per mostrare una notifica o eseguire azioni dopo la creazione di un appello
+    function creaAppello(codiceProva) {
+        // Puoi aggiungere qui la logica per creare l'appello con il codice della prova
+        // e mostrare una notifica o eseguire altre azioni.
+        alert('Appello creato per la prova');
+    }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizza Esami</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-dark px-3">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+        Gestione universitaria ></a>
+        <a href="{{ url_for('admin.adminPage') }}" class="navbar-brand">Profilo Admin ></a>
+        <a href="#" class="navbar-brand">Elenco Esami</a>
+        <a class="navbar-brand ml-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('admin.creaStudente') }}"> Crea Studenti</a>
+          <a href="{{ url_for('admin.creaDocente') }}">Crea Docenti</a>
+          <a href="{{ url_for('admin.creaEsame') }}">Crea Esami</a>
+          <a href="{{ url_for('admin.visualizzaStudenti') }}">Visualizza Studenti</a>
+          <a href="{{ url_for('admin.visualizzaDocenti') }}">Visualizza Docenti</a>
+          <a href="{{ url_for('admin.visualizzaEsami') }}">Visualizza Esami</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btnmenu" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 mb-2 m-5  containergrigio  d-flex justify-content-center align-items-center">
+        <div class="container p-3">
+
+    <h2>Elenco Esami</h2>
+    <hr>
+    <h1></h1>
+
+    <table class="table  table-bordered">
+        <thead class="bg-info">
+            <tr>
+                <th>Codice</th>
+                <th>Nome Esame</th>
+                <th>Docenti</th>
+                <th>Aggiungi Docente</th>
+                <!-- Aggiungere altri campi se necessario -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for esame in esami %}
+                <tr>
+                    <td>{{ esame.cod }}</td>
+                    <td>{{ esame.name }}</td>
+                    <td>{{ esame.docenti }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('admin.ricercaDocente', codEsame = esame.cod) }}">
+                            <input type="hidden" name="cod" value="{{ esame.cod }}">
+                            <button type="submit" class="btn btn-danger"> Aggiungi </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    </div>
+</body>
+</html>

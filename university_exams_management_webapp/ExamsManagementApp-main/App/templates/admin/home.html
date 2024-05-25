@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+    <title>Homepage Admin</title>
+    <style>
+        .width-btn {
+            width: 80%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark bg-info">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+            Gestione universitaria &gt; Profilo Admin
+        </a>
+    </nav>
+
+    <div class="p-3 mb-2 m-5  containergrigio">
+    <div class="container p-3">
+        <h2>Pannello di Amministrazione</h2>
+        <hr>
+
+        <div class="row p-2 mt-5">
+            <div class="col-2"><h5><strong>Funzionalità:</strong></h5></div>
+            <div class="col-5">
+               <a class="btn btn-outline-danger width-btn" href="{{ url_for('admin.creaStudente') }}">Crea Studenti</a> </div>
+            <div class="col-5">
+                <a class="btn btn-outline-danger width-btn" href="{{ url_for('admin.visualizzaStudenti') }}">Visualizza Studenti</a>
+            </div>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-2"></div>
+            <div class="col-5">
+               <a class="btn btn-outline-danger width-btn" href="{{ url_for('admin.creaDocente') }}">Crea Docenti</a> </div>
+            <div class="col-5">
+                <a class="btn btn-outline-danger width-btn" href="{{ url_for('admin.visualizzaDocenti') }}">Visualizza Docenti</a>
+            </div>
+        </div>
+
+
+        <div class="row p-2">
+            <div class="col-2"></div>
+            <div class="col-5"> <a class="btn btn-outline-danger width-btn" href="{{ url_for('admin.creaEsame') }}">Crea Esami</a>
+            </div>
+            <div class="col-5">
+                <a class="btn btn-outline-danger width-btn" href="{{ url_for('admin.visualizzaEsami') }}">Visualizza Esami</a>
+                </div>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-2"></div>
+            <div class="col-5">
+                <a class="btn btn-outline-danger width-btn" href="{{ url_for('auth.logout') }}">Logout</a> </div>
+            <div class="col-5"></div>
+        </div>
+
+
+    </div>
+    </div>
+
+    <!-- Bootstrap e script JS necessari -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+
+
+
+</body></html>

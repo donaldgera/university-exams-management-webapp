@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ricerca Docenti</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-info">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+        Gestione universitaria > </a>
+        <a href="{{ url_for('teacher.teacherPage') }}" class="navbar-brand">Profilo Insegnante ></a>
+        <a href="{{ url_for('teacher.visualizzaCorsi') }}" class="navbar-brand">Corsi tenuti ></a>
+        <a href="{{ url_for('teacher.visualizzaDocenti', codEsame = codEsame) }}" class="navbar-brand">Elenco docenti ></a>
+        <a href="#" class="navbar-brand">Ricerca docenti</a>
+        <a class="navbar-brand ml-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('teacher.visualizzaCorsi') }}">Visualizza Corsi</a>
+          <a href="{{ url_for('teacher.visualizzaAppelli') }}">Visualizza Appelli</a>
+          <a href="{{ url_for('teacher.visualizzaProveGestite') }}">Visualizza Prove Gestite</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btn-info" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 mb-2 m-5  containergrigio  d-flex justify-content-center align-items-center">
+    <div class="container p-3" style="width: 75%;">
+
+        <h2>Ricerca Docenti</h2>
+        <hr>
+
+    <!-- Barra di ricerca -->
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="searchInput" placeholder="Cerca un docente...">
+            <div class="input-group-append">
+                <button class="btn btn-outline-danger" type="button" onclick="searchDocente()">Cerca</button>
+            </div>
+        </div>
+
+<!-- Non mi piace questa lista di elementi, ma ho paura di spaccare qualcosa, da rivedere -->
+        <!-- Risultati della ricerca -->
+        <ul id="searchResults" class="list-group">
+            {% for docente in docenti %}
+                <li class="list-group-item">
+                    <a href="#">{{ docente.name ~ ' ' ~  docente.surname }}</a>
+                    <a href="{{ url_for('teacher.aggiungiDocente', codEsame=codEsame, codDocente=docente.cod) }}" class="btn btn-sm btn-danger">Aggiungi</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+            <!-- Pulsante per tornare alla Pagina Principale
+            <div class="mt-4">
+            <a href="{{ url_for('teacher.teacherPage') }}" class="btn btn-outline-secondary">Torna alla Pagina Principale</a>
+        </div>-->
+    </div>
+    </div>
+
+<!-- Bootstrap JS e le sue dipendenze -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- JavaScript aggiuntivo per personalizzazioni -->
+<script>
+    // Funzione per gestire la ricerca del docente
+    function searchDocente() {
+        var input, filter, ul, li, a, i, txtValue;
+        input = document.getElementById('searchInput');
+        filter = input.value.toUpperCase();
+        ul = document.getElementById('searchResults');
+        li = ul.getElementsByTagName('li');
+
+        // Cicla attraverso tutti gli elementi della lista e nasconde quelli che non corrispondono alla ricerca
+        for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName('a')[0];
+            txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = '';
+            } else {
+                li[i].style.display = 'none';
+            }
+        }
+    }
+
+    // Aggiungi un listener per rilevare i cambiamenti nell'input
+    document.getElementById('searchInput').addEventListener('input', function() {
+        searchDocente();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <!-- Link ai file CSS di Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            padding: 80px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-info">
+        <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+        Gestione università
+        </a>
+    </nav>
+
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">Benvenuto alla Home</h1>
+            <p class="lead">Clicca il bottone qui sotto per accedere alla pagina di login.</p>
+            <hr class="my-4">
+            <p>Se hai gia effettuato il login verrai reindirizzato alla tua area personale</p>
+            <!-- Bottone per la pagina di login -->
+            <a class="btn btn-danger btn" href="/login" role="button">Login</a>
+        </div>
+    </div>
+
+    <!-- Link ai file JavaScript

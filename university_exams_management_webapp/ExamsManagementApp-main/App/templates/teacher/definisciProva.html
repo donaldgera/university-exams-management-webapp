@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crea Prova</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .navbar{
+            background-color: #17a2b8;
+        }
+        .btnmenu{
+            background-color: #17a2b8;
+            color: white;
+        }
+        .btnmenu:hover{
+            background-color: #17a2b8;
+            color: white;
+        }
+        .form-group {
+        padding: 0.5rem; /* o qualsiasi valore di padding desiderato */
+        }
+        .containergrigio {
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 50px;
+            /*width: 75%;*/
+        }
+    </style>
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+    <!-- Bootstrap 5 cambia i colori e il padding, aggiunto in style e px perchè left non va per qualche mistica ragione -->
+    <nav class="navbar navbar-dark px-3">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+        Gestione universitaria > </a>
+        <a href="{{ url_for('teacher.teacherPage') }}" class="navbar-brand">Profilo Insegnante ></a>
+        <a href="#" class="navbar-brand">Creazione prove</a>
+        <a class="navbar-brand ms-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('teacher.visualizzaCorsi') }}">Visualizza Corsi</a>
+          <a href="{{ url_for('teacher.visualizzaAppelli') }}">Visualizza Appelli</a>
+          <a href="{{ url_for('teacher.visualizzaProveGestite') }}">Visualizza Prove Gestite</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btnmenu" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 mb-2 m-5  containergrigio  d-flex justify-content-center align-items-center">
+        <div class="container p-3">
+
+    <h2>Crea Prove</h2>
+    <hr style="width: 75%;">
+
+    <form method="POST" action="{{ url_for('teacher.creaProva', codEsame=codEsame) }}">
+        <div id="prova-container" style="width: 75%;" >
+            <!-- Prima prova -->
+            <div class="form-group">
+                <label for="codProva">Codice della Prova:</label>
+                <input type="text" class="form-control" id="codProva" name="codProva" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tipologia">Tipologia:</label>
+                <select class="form-control" id="tipologia" name="tipologia" required>
+                    <option value="Orale">Orale</option>
+                    <option value="Scritto">Scritto</option>
+                    <option value="Progetto">Progetto</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="durata">Durata della Prova (minuti):</label>
+                <input type="number" class="form-control" id="durata" name="durata" required max="180">
+            </div>
+            <div class="form-group">
+                <label for="bonus">Bonus:</label>
+                <!--vogliamo un massimo anche per i bonus?-->
+                <input type="text" class="form-control" id="bonus" name="bonus" required>
+            </div>
+
+            <div class="form-group form-switch">
+                <label for="prove_primarie">Richiede Superamento:</label>
+                {% for prova in prove %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="prove_primarie" name="prove_primarie[]" value="{{ prova.cod }}">
+                        <label class="form-check-label" for="prove_primarie">
+                            {{ prova.cod }}
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- Switch box per idoneità -->
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="idoneita" name="idoneita" value="true">
+                <label class="form-check-label" for="idoneita">
+                    Idoneità
+                </label>
+            </div>
+
+
+            <div class="form-group">
+                <label for="peso">Peso (da 0 a 1):</label>
+                <input type="number" class="form-control" id="peso" name="peso" min="0" max="1" step="0.01" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-danger">Crea</button>
+    </form>
+</div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const durataInput = document.getElementById("durata");
+
+        durataInput.addEventListener("input", function() {
+            const durataValue = parseFloat(durataInput.value);
+            if (isNaN(durataValue) || durataValue < 0) {
+                durataInput.setCustomValidity("La durata non può essere negativa.");
+            } else {
+                durataInput.setCustomValidity("");
+            }
+        });
+    });
+</script>
+<!-- ... (previous HTML code) ... -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const durataInput = document.getElementById("durata");
+        const idoneitaCheckbox = document.getElementById("idoneita");
+        const pesoInput = document.getElementById("peso");
+        const bonusInput = document.getElementById("bonus");
+
+        durataInput.addEventListener("input", function() {
+            const durataValue = parseFloat(durataInput.value);
+            if (isNaN(durataValue) || durataValue < 0) {
+                durataInput.setCustomValidity("La durata non può essere negativa.");
+            } else {
+                durataInput.setCustomValidity("");
+            }
+        });
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+            const idoneitaChecked = idoneitaCheckbox.checked;
+            const pesoValue = parseFloat(pesoInput.value);
+            const bonusValue = parseFloat(bonusInput.value);
+
+            // Check Invariant: idoneità = True => peso = 0 and Bonus = 0
+            if (idoneitaChecked && (pesoValue !== 0 || bonusValue !== 0)) {
+                alert("Invariante violato: idoneità = True => peso = 0 and Bonus = 0");
+                event.preventDefault(); // Prevent form submission
+            }
+
+            // Check Invariant: Bonus != 0 => peso = 0 and idoneità = False
+            if (bonusValue !== 0 && (pesoValue !== 0 || idoneitaChecked)) {
+                alert("Invariante violato: Bonus != 0 => peso = 0 and idoneità = False");
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    });
+</script>
+
+<!-- ... (remaining HTML code) ... -->
+
+</body>
+</html>

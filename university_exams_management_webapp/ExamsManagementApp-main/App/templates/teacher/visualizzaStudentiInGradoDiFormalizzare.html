@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elenco Studenti In Grado di Formalizzare</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-info">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+            Gestione universitaria > </a>
+        <a href="{{ url_for('teacher.teacherPage') }}" class="navbar-brand">Profilo Insegnante ></a>
+        <a href="{{ url_for('teacher.visualizzaCorsi') }}" class="navbar-brand">Corsi tenuti ></a>
+        <a href="#" class="navbar-brand">Stato formalizzazioni</a>
+        <a class="navbar-brand ml-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('teacher.visualizzaCorsi') }}">Visualizza Corsi</a>
+          <a href="{{ url_for('teacher.visualizzaAppelli') }}">Visualizza Appelli</a>
+          <a href="{{ url_for('teacher.visualizzaProveGestite') }}">Visualizza Prove Gestite</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btn-info" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 mb-2 m-5 containergrigio">
+    <div class="container p-3">
+
+        <h2>Elenco Studenti In Grado di Formalizzare</h2>
+        <hr>
+
+        <table class="table">
+            <thead class="bg-info">
+                <tr>
+                    <th>Nome</th>
+                    <th>Cognome</th>
+                    <th>Email</th>
+                    <th>Voto</th>
+                    <th>Prove Relative</th>
+                    <!-- Aggiungi altre colonne necessarie -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for studente in studenti %}
+                    <tr>
+                        <td>{{ studente.name }}</td>
+                        <td>{{ studente.surname }}</td>
+                        <td>{{ studente.email }}</td>
+                        <td>{{ studente.getVotoEsame(codEsame) }}</td>
+                        <td>
+                            <a href="{{ url_for('teacher.visualizzaProveStudente', codEsame=codEsame, matricola=studente.matricola) }}">
+                                <button type="button" class="btn btn-danger">Visualizza Prove</button>
+                            </a>
+                        </td>
+                        <!-- Aggiungi altre colonne necessarie -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Aggiungi altri dettagli o link se necessario -->
+
+    </div>
+    </div>
+
+    <!-- Bootstrap JS e le sue dipendenze -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

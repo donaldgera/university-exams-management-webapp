@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+    <title>Prenotazioni effettuate dallo studente</title>
+
+    <script>
+        function openNav() {
+          document.getElementById("mySidebar").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-info">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='graduation-cap-png.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+            Gestione universitaria > </a>
+        <a href="{{ url_for('student.studentPage') }}" class="navbar-brand">Profilo studente ></a>
+        <a href="#" class="navbar-brand">Storico prenotazioni</a>
+        <a class="navbar-brand ml-auto"> </a>
+
+        <div id="mySidebar" class="sidebar">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="{{ url_for('student.appelliDisponibili') }}">Prenota Appello</a>
+          <a href="{{ url_for('student.prenotazioni') }}">Prenotazioni</a>
+          <a href="{{ url_for('student.pianoDiStudi') }}">Piano di studi</a>
+          <a href="{{ url_for('student.esiti') }}">Bacheca Esiti</a>
+          <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+
+        <div id="main" style="padding: 0px;">
+          <button class="btn btn-info" onclick="openNav()">&#9776; Menu</button>
+        </div>
+    </nav>
+
+    <div class="p-3 my-2 m-5  containergrigio">
+    <div class="container p-3">
+
+    <h2>Prenotazioni effettuate dallo studente</h2>
+    <hr>
+
+    <!--<a href="{{ url_for('student.studentPage') }}" class="btn btn-info">
+        <i class="fas fa-arrow-left"></i> Torna Indietro
+    </a>-->
+    <br>
+        <table class="table">
+            <thead class="bg-info">
+                <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Luogo</th>
+                    <th scope="col">Prova</th>
+                    <th scope="col">Corso Relativo</th>
+                    <th scope="col">Stato attività</th>
+                    <th scope="col">Voto</th>
+                    <th scope="col">Elimina</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="6"><strong>Appelli non più validi</strong></td>
+                </tr>
+                {% for appello in studente.getAppelliNonValidi() %}
+                    <tr>
+                        <td>{{ appello.data.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ appello.luogo }}</td>
+                        <td>{{ appello.prove }}</td>
+                        <td>{{ appello.prove.esami }}</td>
+                            {% if appello.data < datetime.utcnow() %}
+                                <td><button class="btn btn-block btnteall" onclick="mostraData('{{ appello.data }}')">Svolto</button></td>
+                            {% else %}
+                                <td><button class="btn btn-block btn-danger" >Non Svolto</button></td>
+                            {% endif %}
+                        <td>{{ studente.getVotoProva(appello.codAppello) }}</td>
+                        <td>
+                            <a href="{{url_for('student.eliminaPrenotazioneAppello', codAppello=appello.codAppello)}}">
+                                <button type="submit" class="btn btn-danger" disabled>Elimina</button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tbody>
+                <tr>
+                    <td colspan="6"><strong>Appelli a cui sei iscritto</strong></td>
+                </tr>
+                {% for appello in studente.appelli %}
+                    {% if appello not in studente.getAppelliNonValidi() %}
+                        <tr>
+                            <td>{{ appello.data.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ appello.luogo }}</td>
+                            <td>{{ appello.prove }}</td>
+                            <td>{{ appello.prove.esami }}</td>
+                            {% if appello.data < datetime.utcnow() %}
+                                <td><button class="btn btnteall" onclick="mostraData('{{ appello.data }}')">Svolto</button></td>
+                            {% else %}
+                                <td><button class="btn btn-danger" >Non Svolto</button></td>
+                            {% endif %}
+                            <td>{{ studente.getVotoProva(appello.codAppello) }}</td>
+                            <td>
+                                <a href="{{url_for('student.eliminaPrenotazioneAppello', codAppello=appello.codAppello)}}">
+                                    <button type="submit" class="btn btn-danger" >Elimina</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        function mostraData(data) {
+            alert("Hai svolto l'appello in data: " + data);
+        }
+    </script>
+</body>
+</html>
